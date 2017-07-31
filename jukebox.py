@@ -30,15 +30,18 @@ class Scrollbox(tkinter.Listbox):
 def get_albums(event):
     lb = event.widget # http://effbot.org/tkinterbook/tkinter-events-and-bindings.htm
     index = lb.curselection()[0] # http://effbot.org/tkinterbook/listbox.htm    -> tells about the selected field by the cursor
-    artis_name = lb.get(index), # returns a string
+    #print(index)
+    artist_name = lb.get(index), # returns a string
+    #print(artist_name)
 
     # get the artist ID from the databse row
-    artist_id = conn.execute('SELECT artists._id FROM artists WHERE artists.name=?',artis_name).fetchone() # fetch one id at a time and place it in the artist_.id variable
+    artist_id = conn.execute('SELECT artists._id FROM artists WHERE artists.name=?',artist_name).fetchone() # fetch one id at a time and place it in the artist_.id variable
     alist = [] #empty list to store the artists one by one
         
      # filling the alist
     for row in conn.execute('SELECT albums.name FROM albums WHERE albums.artist=? ORDER BY albums.name', artist_id):
-        print(row) #TODO remove this
+        #print('Printing albums *********************')
+        #print(row) #TODO remove this
         alist.append(row[0])
         
     albumLV.set(tuple(alist))
@@ -49,12 +52,13 @@ def get_songs(event):
     lb = event.widget
     index = int(lb.curselection()[0])
     album_name = lb.get(index),
+    
 
     # get the albumn ID from the database row
     album_id = conn.execute('SELECT albums._id FROM albums WHERE albums.name=?', album_name).fetchone()
     alist = []
     for x in conn.execute('SELECT songs.title FROM songs WHERE songs.album=? ORDER BY songs.track', album_id):
-        print(x)
+        #print(x)
         alist.append(x[0])
     
     songLV.set(tuple(alist))
